@@ -1,0 +1,6 @@
+*.yml
+*.example
+log/*
+!log/.keep
+data/*
+!data/.keep

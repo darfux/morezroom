@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>moreZRoom</title>
+    <script type="text/javascript">
+    function confirmAction(){
+        var confirmed = confirm("Are you sure?");
+        return confirmed;
+    }
+    </script>
+
+    <style media="screen">
+      th{
+        padding-left: 2em;
+      }
+      td{
+        padding-left: 2em;
+      }
+      .reserving{
+        color: red;
+      }
+      a{
+        color: blue;
+        text-decoration: none;
+      }
+      .notnotify a{
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+        <tr>
+          <th>名称</th>
+          <th>id</th>
+          <th>价格</th>
+          <th>状态</th>
+          <th>最后更新</th>
+          <th>订阅</th>
+          <th>操作</th>
+        </tr>
+        <% @rooms.each do |room| %>
+        <tr>
+          <td><a href="<%= room[:url] %>" target="_blank"><%= room[:name] %></a></td>
+          <td><%= room[:id] %></td>
+          <td><%= room[:data]['price'] %></td>
+          <td class="<%= if room[:data]['is_reserve']=='1' then 'reserving' end %>">
+            <%= ZRoom.explain_status room[:data]['status'] %>(<%= room[:data]['is_reserve'] %>)
+          </td>
+          <td><%= Time.at(room[:last_update]).strftime("%m-%d %H:%M:%S") %></td>
+          <td class="<%= if !room[:notify] then 'notnotify' end %>">
+            <a href="/change_notify/<%= room[:id] %>" onclick="return confirmAction()"><%= room[:notify] %></a>
+          </td>
+          <td><a href="/delete/<%= room[:id] %>" onclick="return confirmAction()">删除</a></td>
+        </tr>
+        <% end %>
+    </table>
+
+
+    <a href="/new_room">添加</a>
+  </body>
+</html>
